@@ -1,9 +1,27 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { createClient } from "@/lib/server";
 import { CatIcon } from "lucide-react";
+import { headers } from "next/headers";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 const Login = () => {
+  async function githubLogin() {
+    "use server";
+    const supabase = await createClient();
+    const origin = (await headers()).get("origin");
+
+    const { data } = await supabase.auth.signInWithOAuth({
+      provider: "github",
+      options: {
+        redirectTo: `${origin}/auth/callback`,
+      },
+    });
+    if (data.url) {
+      redirect(data.url); // use the redirect API for your server framework
+    }
+  }
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-background text-foreground p-4">
       <div className="flex flex-col items-center mb-8">
@@ -52,7 +70,10 @@ const Login = () => {
             o
           </span>
         </div>
-        <Button className="w-full bg-transparent hover:bg-secondary text-foreground font-bold py-3 px-4 rounded-full border border-gray-700 mb-4 gap-2">
+        <Button
+          onClick={githubLogin}
+          className="w-full bg-transparent hover:bg-secondary text-foreground font-bold py-3 px-4 rounded-full border border-gray-700 mb-4 gap-2"
+        >
           Log in with Github
         </Button>
       </div>
