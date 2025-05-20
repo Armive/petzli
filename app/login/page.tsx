@@ -24,12 +24,12 @@ const Login = () => {
   }
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-background text-foreground p-4">
+      <CatIcon className="w-[50px] h-[50px]" />
       <div className="flex flex-col items-center mb-8">
-        <CatIcon className="w-16 h-16 mb-4" />
         <h1 className="text-3xl font-bold text-center">
-          Log in to see
+          Sniff around
           <br />
-          furry animals.
+          your furry feed.
         </h1>
       </div>
       <form className="w-full max-w-[324px] space-y-4 ">
@@ -40,7 +40,7 @@ const Login = () => {
           <Input
             id="email"
             type="email"
-            placeholder="Example: furry.pet@gmail.com"
+            placeholder="Example: whiskers@meowmail.com"
           />
         </div>
         <div>
