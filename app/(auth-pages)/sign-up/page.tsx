@@ -13,7 +13,6 @@ import {
   XCircle,
   PawPrint,
   User,
-  Shield,
   Rabbit,
   MoveRight,
 } from "lucide-react";
@@ -33,7 +32,7 @@ import { Badge } from "@/components/ui/badge";
 
 type UserType = "pet-owner" | "no-pet" | null;
 
-interface FormData {
+interface UserFormData {
   userType: UserType;
   username: string;
   email: string;
@@ -44,7 +43,7 @@ interface FormData {
 }
 
 export default function SignUp() {
-  const [userData, setUserData] = useState<FormData>({
+  const [userData, setUserData] = useState<UserFormData>({
     userType: null,
     username: "",
     email: "",
@@ -101,7 +100,7 @@ export default function SignUp() {
   };
   const submitForm = (formData: FormData) => {
     setIsSubmitting(true);
-    registerUserAction(formData as unknown as FormData)
+    registerUserAction(formData)
       .then(() => {
         console.log("Form submitted successfully");
       })
@@ -109,18 +108,27 @@ export default function SignUp() {
         setIsSubmitting(false);
       });
   };
-
+  // Fix for "Argument of type 'FormData' is not assignable to parameter of type 'FormData'"
+  // This happens if there are multiple global FormData definitions (e.g., Node.js vs browser).
+  // To ensure the FormData instance is compatible, cast it as any.
+  // Alternatively, you can update the registerUserAction signature to accept 'any' or 'unknown'.
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (isSubmitting) return;
     const formData = new FormData(e.target as HTMLFormElement);
 
     // Update userData with form data
-    const newData: FormData = { ...userData };
-    for (const [key, value] of formData.entries()) {
-      if (key in newData) {
-        newData[key as keyof FormData] = value as keyof FormData;
-      }
+    const newData: UserFormData = { ...userData };
+    if (step === 1) {
+      newData.userType = formData.get("userType") as UserType;
+    } else if (step === 2) {
+      newData.username = formData.get("username") as string;
+      newData.email = formData.get("email") as string;
+      newData.password = formData.get("password") as string;
+    } else if (step === 3 && userData.userType === "pet-owner") {
+      newData.petName = formData.get("petName") as string;
+      newData.petGender = formData.get("petGender") as string;
+      newData.petAge = formData.get("petAge") as string;
     }
 
     if (step < 2 || (step === 2 && userData.userType === "no-pet")) {
@@ -142,7 +150,7 @@ export default function SignUp() {
         submitFormData.append("petGender", newData.petGender ?? "");
         submitFormData.append("petAge", newData.petAge ?? "");
       }
-      submitForm(submitFormData as unknown as FormData);
+      submitForm(submitFormData);
     }
   };
 
