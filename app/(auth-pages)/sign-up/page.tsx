@@ -11,10 +11,9 @@ import {
   Github,
   CheckCircle,
   XCircle,
-  PawPrint,
   User,
   Rabbit,
-  MoveRight,
+  PawPrint,
 } from "lucide-react";
 import {
   Select,
@@ -204,78 +203,77 @@ export default function SignUp() {
         <div className="space-y-4">
           {/* Step 1: User Type Selection */}
           {step === 1 && (
-            <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-              <div className="text-center mb-4">
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Choose how you&apos;d like to use our platform
-                </p>
-              </div>
+            <>
+              <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+                <div className="text-center mb-4">
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    Choose how you&apos;d like to use our platform
+                  </p>
+                </div>
 
-              <div className="space-y-3">
-                <button
-                  type="button"
-                  onClick={() =>
-                    setUserData({ ...userData, userType: "pet-owner" })
-                  }
-                  className={`w-full p-4 rounded-lg border-2 transition-all ${
-                    userData.userType === "pet-owner"
-                      ? "border-black bg-black/5 dark:border-white dark:bg-white/5"
-                      : "border-gray-300 hover:border-gray-400 dark:border-gray-600 dark:hover:border-gray-500"
-                  }`}
-                >
-                  <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 bg-gray-100 dark:bg-black rounded-full flex items-center justify-center">
-                      <PawPrint className="w-5 h-5 text-foreground" />
-                    </div>
-                    <div className="text-left">
-                      <h3 className="font-medium text-foreground">
-                        It&apos;s for my pet
-                      </h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
-                        Show off your pet&apos;s best moments
-                      </p>
-                    </div>
+                <div className="space-y-3">
+                  <div className="p-[2px] rounded-lg transition-all  bg-gradient-to-bl from-violet-600 to-pink-800 bg-gray-300   ">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setUserData({ ...userData, userType: "pet-owner" })
+                      }
+                      className={`cursor-pointer w-full p-4 rounded-lg transition-all duration-200 bg-background  ${userData.userType === "pet-owner" ? "bg-gray-800/50" : ""}`}
+                    >
+                      <div className="flex items-center space-x-3">
+                        <div className="w-10 h-10  rounded-full bg-[#e0e0e0] shadow-[20px_20px_60px_#000,-20px_-20px_60px_#000] flex items-center justify-center ">
+                          <PawPrint className="w-5 h-5  text-black" />
+                        </div>
+                        <div className="text-left">
+                          <h3 className="font-medium text-foreground">
+                            I have a pet
+                          </h3>
+                          <p
+                            className={`text-sm ${userData.userType === "pet-owner" ? "text-gray-200" : "text-gray-600"} dark:text-gray-400`}
+                          >
+                            Share your pet&apos;s moments
+                          </p>
+                        </div>
+                      </div>
+                    </button>
                   </div>
-                </button>
 
-                <button
-                  type="button"
-                  onClick={() =>
-                    setUserData({ ...userData, userType: "no-pet" })
-                  }
-                  className={`w-full p-4 rounded-lg border-2 transition-all ${
-                    userData.userType === "no-pet"
-                      ? "border-black bg-black/5 dark:border-white dark:bg-white/5"
-                      : "border-gray-300 hover:border-gray-400 dark:border-gray-600 dark:hover:border-gray-500"
-                  }`}
-                >
-                  <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 bg-gray-100 dark:bg-black rounded-full flex items-center justify-center">
-                      <User className="w-5 h-5 text-foreground" />
-                    </div>
-                    <div className="text-left">
-                      <h3 className="font-medium text-foreground">
-                        I love pets
-                      </h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
-                        Explore pets and meet their humans
-                      </p>
-                    </div>
+                  <div className="p-[2px] rounded-lg transition-all duration-300 bg-gradient-to-bl from-violet-600 to-pink-800 bg-gray-300   ">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setUserData({ ...userData, userType: "no-pet" })
+                      }
+                      className={`cursor-pointer w-full p-4 rounded-lg transition-all duration-200 bg-background  ${userData.userType === "no-pet" ? "bg-gray-800/50" : ""}`}
+                    >
+                      <div className="flex items-center space-x-3">
+                        <div className="w-10 h-10  rounded-full bg-[#e0e0e0] shadow-[20px_20px_60px_#000,-20px_-20px_60px_#000] flex items-center justify-center">
+                          <User className="w-5 h-5 text-black" />
+                        </div>
+                        <div className="text-left">
+                          <h3 className="font-medium text-foreground">
+                            I&apos;m a pet lover
+                          </h3>
+                          <p
+                            className={`text-sm ${userData.userType === "no-pet" ? "text-gray-200" : "text-gray-600"} dark:text-gray-400`}
+                          >
+                            Connect with pets and owners
+                          </p>
+                        </div>
+                      </div>
+                    </button>
                   </div>
-                </button>
-              </div>
+                </div>
 
-              <Button
-                type="submit"
-                disabled={!userData.userType}
-                className="dark:text-black dark:bg-white hover:dark:bg-black hover:dark:text-white bg-black hover:bg-white hover:text-black disabled:opacity-50 gap-2"
-              >
-                Start
-                <span>
-                  <MoveRight />
-                </span>
-              </Button>
-            </form>
+                <Button
+                  type="submit"
+                  disabled={!userData.userType}
+                  className="dark:text-black dark:bg-white hover:dark:bg-black hover:dark:text-white bg-black hover:bg-white hover:text-black disabled:opacity-50"
+                >
+                  Next Step
+                </Button>
+              </form>
+            </>
           )}
 
           {/* Step 2: Account Information */}
@@ -291,7 +289,7 @@ export default function SignUp() {
                 <Input
                   type="email"
                   placeholder="Example: furry.pet@gmail.com"
-                  className="w-full rounded-lg dark:text-white text-foreground "
+                  className="w-full rounded-sm dark:text-white text-foreground outline-none focus-visible:outline-none dark:border-white  border-black "
                   required
                   name="email"
                   minLength={1}
@@ -315,7 +313,7 @@ export default function SignUp() {
                   type="password"
                   placeholder="Don't forget pas-sword"
                   name="password"
-                  className="w-full border-border rounded dark:text-white text-foreground"
+                  className="w-full  rounded-sm dark:text-white text-foreground outline-none focus-visible:outline-none dark:border-white  border-black"
                   required
                   minLength={8}
                   maxLength={30}
@@ -344,7 +342,7 @@ export default function SignUp() {
                       setUserData({ ...userData, username: value });
                     }}
                     placeholder="Choose the furry little paw username"
-                    className="w-full border-gray-300 rounded pr-10 text-foreground"
+                    className="w-full dark:border-white  border-black rounded-sm pr-10 text-foreground"
                     required
                     name="username"
                     autoComplete="off"
@@ -412,7 +410,7 @@ export default function SignUp() {
                     <Input
                       type="text"
                       placeholder="What's your pet's name?"
-                      className="w-full border-gray-300 rounded text-foreground focus:outline-none"
+                      className="w-full  rounded text-foreground focus:outline-none dark:border-white  border-black"
                       required
                       name="petName"
                       defaultValue={userData.petName}
@@ -428,7 +426,7 @@ export default function SignUp() {
                   <div>
                     <label
                       htmlFor="petGender"
-                      className="block text-sm mb-2 dark:text-white text-foreground"
+                      className="block text-sm mb-2 dark:text-white text-foreground "
                     >
                       Pet&apos;s Gender
                     </label>
@@ -440,7 +438,7 @@ export default function SignUp() {
                       }}
                       required
                     >
-                      <SelectTrigger className="w-full h-[38px] px-3  border dark:border-white rounded-[4px] shadow-sm text-foreground placeholder:text-foreground text-[14px] focus:outline-none ">
+                      <SelectTrigger className="w-full h-[38px] px-3  border dark:border-white bg-white  border-black  rounded-[4px] shadow-sm text-foreground placeholder:text-foreground text-[14px] focus:outline-none ">
                         <SelectValue placeholder="Choose your pet's gender" />
                       </SelectTrigger>
                       <SelectContent>
@@ -462,7 +460,7 @@ export default function SignUp() {
                     <Input
                       type="number"
                       placeholder="How old is your pet?"
-                      className="w-full border-gray-300 rounded text-foreground focus-visible:outline-none"
+                      className="w-full dark:border-white  border-black rounded text-foreground focus-visible:outline-none"
                       required
                       name="petAge"
                       min={0}
