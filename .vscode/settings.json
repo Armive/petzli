@@ -1,0 +1,37 @@
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "prettier.singleQuote": true,
+  "prettier.trailingComma": "es5",
+  "prettier.tabWidth": 2,
+  "prettier.useTabs": false,
+  "prettier.semi": true,
+  "prettier.bracketSpacing": true,
+  "prettier.arrowParens": "always",
+  "prettier.printWidth": 80,
+  "prettier.proseWrap": "preserve",
+  "prettier.endOfLine": "lf",
+  "prettier.htmlWhitespaceSensitivity": "ignore",
+  "prettier.vueIndentScriptAndStyle": true,
+  "prettier.jsxSingleQuote": false,
+  "prettier.requireConfig": true,
+  "files.associations": {
+    "*.js": "javascript",
+    "*.ts": "typescript",
+    "*.vue": "vue",
+    "*.json": "json",
+    "*.md": "markdown",
+    "*.html": "html",
+    "*.css": "css",
+    "*.scss": "scss",
+    "*.less": "less"
+  },
+  "workbench.colorCustomizations": {
+  
+    "statusBar.background": "#ffffff6c",
+    "statusBar.foreground": "#000"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
+}

@@ -13,8 +13,9 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "Next.js and Supabase Starter Kit",
-  description: "The fastest way to build apps with Next.js and Supabase",
+  title: "Petzli - Pet Social Network",
+  description:
+    "Petzli is a social network for pet lovers to share their pets, connect with other pet owners, and discover pet-related content.",
 };
 
 const geistSans = Geist({
@@ -54,7 +55,7 @@ export default function RootLayout({
                 <p>
                   Powered by{" "}
                   <a
-                    href="https://supabase.com/?utm_source=create-next-app&utm_medium=template&utm_term=nextjs"
+                    href="https://supabase.com/?utm_source=petzli&utm_medium=website&utm_term=petzli"
                     target="_blank"
                     className="font-bold hover:underline"
                     rel="noreferrer"
