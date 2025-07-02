@@ -181,9 +181,9 @@ export default function SignUp() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-background text-black p-4">
-      <Cat className="w-16 h-16 mb-8 text-foreground" />
-      <h1 className="text-4xl text-foreground font-bold text-center mb-8 max-w-[400px]">
+    <div className="bg-background flex min-h-screen flex-col items-center justify-center p-4 text-black">
+      <Cat className="text-foreground mb-8 h-16 w-16" />
+      <h1 className="text-foreground mb-8 max-w-[400px] text-center text-4xl font-bold">
         Sign up to see furry animals.
       </h1>
 
@@ -205,27 +205,27 @@ export default function SignUp() {
           {step === 1 && (
             <>
               <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-                <div className="text-center mb-4">
+                <div className="mb-4 text-center">
                   <p className="text-sm text-gray-600 dark:text-gray-400">
                     Choose how you&apos;d like to use our platform
                   </p>
                 </div>
 
                 <div className="space-y-3">
-                  <div className="p-[2px] rounded-lg transition-all  bg-gradient-to-bl from-violet-600 to-pink-800 bg-gray-300   ">
+                  <div className="rounded-lg bg-gray-300 bg-gradient-to-bl from-violet-600 to-pink-800 p-[2px] transition-all">
                     <button
                       type="button"
                       onClick={() =>
                         setUserData({ ...userData, userType: "pet-owner" })
                       }
-                      className={`cursor-pointer w-full p-4 rounded-lg transition-all duration-200 bg-background  ${userData.userType === "pet-owner" ? "bg-gray-800/50" : ""}`}
+                      className={`bg-background w-full cursor-pointer rounded-lg p-4 transition-all duration-200 ${userData.userType === "pet-owner" ? "bg-gray-800/50" : ""}`}
                     >
                       <div className="flex items-center space-x-3">
-                        <div className="w-10 h-10  rounded-full bg-[#e0e0e0] shadow-[20px_20px_60px_#000,-20px_-20px_60px_#000] flex items-center justify-center ">
-                          <PawPrint className="w-5 h-5  text-black" />
+                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#e0e0e0] shadow-[20px_20px_60px_#000,-20px_-20px_60px_#000]">
+                          <PawPrint className="h-5 w-5 text-black" />
                         </div>
                         <div className="text-left">
-                          <h3 className="font-medium text-foreground">
+                          <h3 className="text-foreground font-medium">
                             I have a pet
                           </h3>
                           <p
@@ -238,20 +238,20 @@ export default function SignUp() {
                     </button>
                   </div>
 
-                  <div className="p-[2px] rounded-lg transition-all duration-300 bg-gradient-to-bl from-violet-600 to-pink-800 bg-gray-300   ">
+                  <div className="rounded-lg bg-gray-300 bg-gradient-to-bl from-violet-600 to-pink-800 p-[2px] transition-all duration-300">
                     <button
                       type="button"
                       onClick={() =>
                         setUserData({ ...userData, userType: "no-pet" })
                       }
-                      className={`cursor-pointer w-full p-4 rounded-lg transition-all duration-200 bg-background  ${userData.userType === "no-pet" ? "bg-gray-800/50" : ""}`}
+                      className={`bg-background w-full cursor-pointer rounded-lg p-4 transition-all duration-200 ${userData.userType === "no-pet" ? "bg-gray-800/50" : ""}`}
                     >
                       <div className="flex items-center space-x-3">
-                        <div className="w-10 h-10  rounded-full bg-[#e0e0e0] shadow-[20px_20px_60px_#000,-20px_-20px_60px_#000] flex items-center justify-center">
-                          <User className="w-5 h-5 text-black" />
+                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#e0e0e0] shadow-[20px_20px_60px_#000,-20px_-20px_60px_#000]">
+                          <User className="h-5 w-5 text-black" />
                         </div>
                         <div className="text-left">
-                          <h3 className="font-medium text-foreground">
+                          <h3 className="text-foreground font-medium">
                             I&apos;m a pet lover
                           </h3>
                           <p
@@ -268,7 +268,7 @@ export default function SignUp() {
                 <Button
                   type="submit"
                   disabled={!userData.userType}
-                  className="dark:text-black dark:bg-white hover:dark:bg-black hover:dark:text-white bg-black hover:bg-white hover:text-black disabled:opacity-50"
+                  className="bg-black hover:bg-white hover:text-black disabled:opacity-50 dark:bg-white dark:text-black hover:dark:bg-black hover:dark:text-white"
                 >
                   Next Step
                 </Button>
@@ -282,14 +282,14 @@ export default function SignUp() {
               <div>
                 <label
                   htmlFor="email"
-                  className="block text-foreground text-sm mb-2"
+                  className="text-foreground mb-2 block text-sm"
                 >
                   Email Address
                 </label>
                 <Input
                   type="email"
                   placeholder="Example: furry.pet@gmail.com"
-                  className="w-full rounded-sm dark:text-white text-foreground outline-none focus-visible:outline-none dark:border-white  border-black "
+                  className="text-foreground w-full rounded-sm border-black outline-none focus-visible:outline-none dark:border-white dark:text-white"
                   required
                   name="email"
                   minLength={1}
@@ -305,7 +305,7 @@ export default function SignUp() {
               <div>
                 <label
                   htmlFor="password"
-                  className="block text-foreground text-sm mb-2"
+                  className="text-foreground mb-2 block text-sm"
                 >
                   Password
                 </label>
@@ -313,7 +313,7 @@ export default function SignUp() {
                   type="password"
                   placeholder="Don't forget pas-sword"
                   name="password"
-                  className="w-full  rounded-sm dark:text-white text-foreground outline-none focus-visible:outline-none dark:border-white  border-black"
+                  className="text-foreground w-full rounded-sm border-black outline-none focus-visible:outline-none dark:border-white dark:text-white"
                   required
                   minLength={8}
                   maxLength={30}
@@ -328,7 +328,7 @@ export default function SignUp() {
               <div>
                 <label
                   htmlFor="username"
-                  className="block text-sm mb-2 dark:text-white"
+                  className="mb-2 block text-sm dark:text-white"
                 >
                   Your Username
                 </label>
@@ -342,7 +342,7 @@ export default function SignUp() {
                       setUserData({ ...userData, username: value });
                     }}
                     placeholder="Choose the furry little paw username"
-                    className="w-full dark:border-white  border-black rounded-sm pr-10 text-foreground"
+                    className="text-foreground w-full rounded-sm border-black pr-10 dark:border-white"
                     required
                     name="username"
                     autoComplete="off"
@@ -350,13 +350,13 @@ export default function SignUp() {
                     maxLength={30}
                   />
                   {username.length > 0 && (
-                    <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
                       {isChecking ? (
-                        <div className="w-5 h-5 border-t-2 border-blue-500 rounded-full animate-spin" />
+                        <div className="h-5 w-5 animate-spin rounded-full border-t-2 border-blue-500" />
                       ) : isAvailable ? (
-                        <CheckCircle className="w-5 h-5 text-green-500" />
+                        <CheckCircle className="h-5 w-5 text-green-500" />
                       ) : (
-                        <XCircle className="w-5 h-5 text-red-500" />
+                        <XCircle className="h-5 w-5 text-red-500" />
                       )}
                     </div>
                   )}
@@ -380,7 +380,7 @@ export default function SignUp() {
               <Button
                 disabled={!canProceedFromStep()}
                 type="submit"
-                className="dark:text-black dark:bg-white hover:dark:bg-black hover:dark:text-white bg-black hover:bg-white hover:text-black disabled:opacity-50"
+                className="bg-black hover:bg-white hover:text-black disabled:opacity-50 dark:bg-white dark:text-black hover:dark:bg-black hover:dark:text-white"
               >
                 Next Step
               </Button>
@@ -391,8 +391,8 @@ export default function SignUp() {
             <form onSubmit={handleSubmit} className="flex flex-col gap-3">
               {userData.userType === "pet-owner" ? (
                 <>
-                  <div className="text-center mb-4">
-                    <h2 className="text-lg font-medium text-foreground">
+                  <div className="mb-4 text-center">
+                    <h2 className="text-foreground text-lg font-medium">
                       Tell us about your pet
                     </h2>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -403,14 +403,14 @@ export default function SignUp() {
                   <div>
                     <label
                       htmlFor="petName"
-                      className="block text-sm mb-2 dark:text-white"
+                      className="mb-2 block text-sm dark:text-white"
                     >
                       Pet&apos;s Name
                     </label>
                     <Input
                       type="text"
                       placeholder="What's your pet's name?"
-                      className="w-full  rounded text-foreground focus:outline-none dark:border-white  border-black"
+                      className="text-foreground w-full rounded border-black focus:outline-none dark:border-white"
                       required
                       name="petName"
                       defaultValue={userData.petName}
@@ -426,7 +426,7 @@ export default function SignUp() {
                   <div>
                     <label
                       htmlFor="petGender"
-                      className="block text-sm mb-2 dark:text-white text-foreground "
+                      className="text-foreground mb-2 block text-sm dark:text-white"
                     >
                       Pet&apos;s Gender
                     </label>
@@ -438,7 +438,7 @@ export default function SignUp() {
                       }}
                       required
                     >
-                      <SelectTrigger className="w-full h-[38px] px-3  border dark:border-white bg-white  border-black  rounded-[4px] shadow-sm text-foreground placeholder:text-foreground text-[14px] focus:outline-none ">
+                      <SelectTrigger className="text-foreground placeholder:text-foreground h-[38px] w-full rounded-[4px] border border-black bg-white px-3 text-[14px] shadow-sm focus:outline-none dark:border-white">
                         <SelectValue placeholder="Choose your pet's gender" />
                       </SelectTrigger>
                       <SelectContent>
@@ -453,14 +453,14 @@ export default function SignUp() {
                   <div>
                     <label
                       htmlFor="petAge"
-                      className="block text-sm mb-2 dark:text-white"
+                      className="mb-2 block text-sm dark:text-white"
                     >
                       Pet&apos;s Age
                     </label>
                     <Input
                       type="number"
                       placeholder="How old is your pet?"
-                      className="w-full dark:border-white  border-black rounded text-foreground focus-visible:outline-none"
+                      className="text-foreground w-full rounded border-black focus-visible:outline-none dark:border-white"
                       required
                       name="petAge"
                       min={0}
@@ -477,11 +477,11 @@ export default function SignUp() {
                   </div>
                 </>
               ) : (
-                <div className="text-center py-8">
-                  <div className="w-16 h-16 bg-green-100 dark:bg-green-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <CheckCircle className="w-8 h-8 text-green-600 dark:text-green-400" />
+                <div className="py-8 text-center">
+                  <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/20">
+                    <CheckCircle className="h-8 w-8 text-green-600 dark:text-green-400" />
                   </div>
-                  <h2 className="text-lg font-medium text-foreground mb-2">
+                  <h2 className="text-foreground mb-2 text-lg font-medium">
                     Ready to join!
                   </h2>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -494,7 +494,7 @@ export default function SignUp() {
               <Button
                 disabled={!canProceedFromStep() || isSubmitting}
                 type="submit"
-                className="dark:text-black dark:bg-white hover:dark:bg-black hover:dark:text-white bg-black hover:bg-white hover:text-black disabled:opacity-50"
+                className="bg-black hover:bg-white hover:text-black disabled:opacity-50 dark:bg-white dark:text-black hover:dark:bg-black hover:dark:text-white"
               >
                 {isSubmitting ? "Creating Account..." : "Finish"}
               </Button>
@@ -504,13 +504,13 @@ export default function SignUp() {
           {/* Step 4: Success */}
           {step === 4 && (
             <div>
-              <CardHeader className="flex items-center justify-center mb-4">
-                <div className="w-16 h-16 bg-green-100 dark:bg-green-900/20 rounded-full flex items-center justify-center">
-                  <CheckCircle className="w-8 h-8 text-green-600 dark:text-green-400" />
+              <CardHeader className="mb-4 flex items-center justify-center">
+                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/20">
+                  <CheckCircle className="h-8 w-8 text-green-600 dark:text-green-400" />
                 </div>
               </CardHeader>
-              <CardContent className="flex justify-center flex-col items-center gap-4">
-                <h2 className="text-xl font-medium text-foreground">
+              <CardContent className="flex flex-col items-center justify-center gap-4">
+                <h2 className="text-foreground text-xl font-medium">
                   Account Created!
                 </h2>
                 <p className="text-center text-gray-600 dark:text-gray-400">
@@ -525,23 +525,23 @@ export default function SignUp() {
           {step === 1 && (
             <>
               <div className="relative">
-                <hr className="border-gray-300 my-6" />
-                <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-background px-2 text-sm text-gray-500">
+                <hr className="my-6 border-gray-300" />
+                <span className="bg-background absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transform px-2 text-sm text-gray-500">
                   or
                 </span>
               </div>
               <form action={githubLogin}>
                 <div className="relative">
-                  <Button className="group relative w-full  bg-black hover:bg-black/90 text-white border-0 font-semibold transition-all duration-300 ease-out overflow-hidden shadow-xl hover:shadow-2xl hover:-translate-y-0.5 cursor-pointer">
-                    <div className="flex items-center justify-center gap-3 relative z-10">
-                      <Github className="transition-all duration-300 scale-90 group-hover:scale-110 group-hover:rotate-6" />
+                  <Button className="group relative w-full cursor-pointer overflow-hidden border-0 bg-black font-semibold text-white shadow-xl transition-all duration-300 ease-out hover:-translate-y-0.5 hover:bg-black/90 hover:shadow-2xl">
+                    <div className="relative z-10 flex items-center justify-center gap-3">
+                      <Github className="scale-90 transition-all duration-300 group-hover:scale-110 group-hover:rotate-6" />
 
                       <span>Continue with GitHub</span>
                     </div>
-                    <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-12" />
+                    <div className="absolute inset-0 -translate-x-full skew-x-12 bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
                   </Button>
-                  <Badge className="absolute -top-2 -right-2 bg-white text-black border border-black/20">
-                    <Rabbit className="w-3 h-3 mr-1" />
+                  <Badge className="absolute -top-2 -right-2 border border-black/20 bg-white text-black">
+                    <Rabbit className="mr-1 h-3 w-3" />
                     Faster
                   </Badge>
                 </div>
@@ -554,7 +554,7 @@ export default function SignUp() {
       {step < 4 && (
         <Link
           href="/sign-in"
-          className="mt-8 text-foreground text-sm hover:underline"
+          className="text-foreground mt-8 text-sm hover:underline"
         >
           Already have an account? Log in
         </Link>

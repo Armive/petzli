@@ -9,19 +9,19 @@ export default async function Login(props: { searchParams: Promise<Message> }) {
   const searchParams = await props.searchParams;
   return (
     <form
-      className="w-full min-w-[324px] space-y-4 flex flex-col  justify-center items-center"
+      className="flex w-full min-w-[324px] flex-col items-center justify-center space-y-4"
       action={signInAction}
     >
-      <CatIcon className="w-[50px] h-[50px]" />
-      <div className="flex flex-col items-center mb-8">
-        <h1 className="text-3xl font-bold text-center">
+      <CatIcon className="h-[50px] w-[50px]" />
+      <div className="mb-8 flex flex-col items-center">
+        <h1 className="text-center text-3xl font-bold">
           Sniff around
           <br />
           your furry feed.
         </h1>
       </div>
       <div>
-        <label htmlFor="email" className="block text-sm mb-2">
+        <label htmlFor="email" className="mb-2 block text-sm">
           Email address
         </label>
         <Input
@@ -33,7 +33,7 @@ export default async function Login(props: { searchParams: Promise<Message> }) {
         />
       </div>
       <div>
-        <label htmlFor="email" className="block text-sm mb-2">
+        <label htmlFor="email" className="mb-2 block text-sm">
           Password
         </label>
         <Input
@@ -46,7 +46,7 @@ export default async function Login(props: { searchParams: Promise<Message> }) {
       </div>
       <Link
         href="/signup"
-        className="block text-foreground  text-sm hover:underline"
+        className="text-foreground block text-sm hover:underline"
       >
         Haven&apos;t created your account yet? Sign up
       </Link>
@@ -56,17 +56,17 @@ export default async function Login(props: { searchParams: Promise<Message> }) {
 
       <FormMessage message={searchParams} />
 
-      <div className="w-full max-w-[324px] ">
+      <div className="w-full max-w-[324px]">
         <div className="relative">
-          <hr className="border-white mb-8" />
-          <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-background px-4 text-sm text-secondary-foreground">
+          <hr className="mb-8 border-white" />
+          <span className="bg-background text-secondary-foreground absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transform px-4 text-sm">
             o
           </span>
         </div>
         <Button
           onClick={githubLogin}
           type="button"
-          className="w-full bg-transparent hover:bg-secondary text-foreground font-bold py-3 px-4 rounded-full border border-white mb-4 gap-2"
+          className="hover:bg-secondary text-foreground mb-4 w-full gap-2 rounded-full border border-white bg-transparent px-4 py-3 font-bold"
         >
           <span>
             <GithubIcon />
