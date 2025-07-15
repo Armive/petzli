@@ -181,7 +181,7 @@ export default function SignUp() {
   };
 
   return (
-    <div className="bg-background flex min-h-screen flex-col items-center justify-center p-4 text-black">
+    <div className="bg-background flex min-h-screen flex-col items-center justify-center text-black">
       <Cat className="text-foreground mb-8 h-16 w-16" />
       <h1 className="text-foreground mb-8 max-w-[400px] text-center text-4xl font-bold">
         Sign up to see furry animals.

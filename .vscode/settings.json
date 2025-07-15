@@ -27,7 +27,6 @@
     "*.less": "less"
   },
   "workbench.colorCustomizations": {
-  
     "statusBar.background": "#ffffff6c",
     "statusBar.foreground": "#000"
   },

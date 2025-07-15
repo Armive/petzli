@@ -1,3 +1,4 @@
+import { Header } from "@/components/header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,31 +17,7 @@ export default function PetzliSocialLanding() {
   return (
     <div className="selection:bg-foreground selection:text-background min-h-screen">
       {/* Header */}
-      <header className="container mx-auto px-6 py-8">
-        <nav className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="relative">
-              <div className="bg-foreground flex h-10 w-10 items-center justify-center rounded-full">
-                <Heart className="fill-background h-5 w-5" />
-              </div>
-              <div className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full border-2 border-black bg-white">
-                <div className="h-1.5 w-1.5 rounded-full bg-black"></div>
-              </div>
-            </div>
-            <span className="text-foreground text-2xl font-black tracking-tight">
-              Petzli
-            </span>
-          </div>
-          <Link href="/sign-in">
-            <Button
-              variant="outline"
-              className="border-foreground text-foreground hover:bg-foreground hover:text-background border-2 bg-transparent px-6 font-semibold"
-            >
-              Login
-            </Button>
-          </Link>
-        </nav>
-      </header>
+      <Header />
 
       {/* Hero Section */}
       <main className="container mx-auto px-6">
@@ -77,13 +54,15 @@ export default function PetzliSocialLanding() {
             {/* CTA Section */}
             <div className="space-y-8">
               <div className="flex flex-col justify-center gap-4 sm:flex-row">
-                <Button
-                  size="lg"
-                  className="bg-foreground hover:bg-background hover:border-foreground hover:text-foreground text-background rounded-full border-2 border-transparent px-12 py-6 text-lg font-bold shadow-lg"
-                >
-                  Join the Pack
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
+                <Link href="/sign-up">
+                  <Button
+                    size="lg"
+                    className="bg-foreground hover:bg-background hover:border-foreground hover:text-foreground text-background rounded-full border-2 border-transparent px-12 py-6 text-lg font-bold shadow-lg"
+                  >
+                    Join the Pack
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </Link>
                 <Button
                   variant="outline"
                   size="lg"
@@ -252,7 +231,7 @@ export default function PetzliSocialLanding() {
               <Link href="/sign-up">
                 <Button
                   size="lg"
-                  className="hover:bg-background bg-foreground text-background hover:border-foreground hover:text-foreground rounded-full px-16 py-8 text-xl font-bold shadow-xl transition-all duration-200 hover:border-4 hover:shadow-2xl"
+                  className="hover:bg-background bg-foreground text-background hover:border-foreground hover:text-foreground rounded-full border-4 px-16 py-8 text-xl font-bold shadow-xl transition-all duration-200 hover:shadow-2xl"
                 >
                   Get Started Free
                   <ArrowRight className="ml-3 h-6 w-6" />

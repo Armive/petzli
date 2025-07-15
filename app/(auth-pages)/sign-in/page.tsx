@@ -2,7 +2,7 @@ import { githubLogin, signInAction } from "@/app/actions";
 import { FormMessage, Message } from "@/components/form-message";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { CatIcon, GithubIcon } from "lucide-react";
+import { Cat, GithubIcon } from "lucide-react";
 import Link from "next/link";
 
 export default async function Login(props: { searchParams: Promise<Message> }) {
@@ -12,7 +12,7 @@ export default async function Login(props: { searchParams: Promise<Message> }) {
       className="flex w-full min-w-[324px] flex-col items-center justify-center space-y-4"
       action={signInAction}
     >
-      <CatIcon className="h-[50px] w-[50px]" />
+      <Cat className="text-foreground mb-8 h-16 w-16" />
       <div className="mb-8 flex flex-col items-center">
         <h1 className="text-center text-3xl font-bold">
           Sniff around
