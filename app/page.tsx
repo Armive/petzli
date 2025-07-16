@@ -15,7 +15,7 @@ import Link from "next/link";
 
 export default function PetzliSocialLanding() {
   return (
-    <div className="selection:bg-foreground selection:text-background min-h-screen">
+    <div className="min-h-screen">
       {/* Header */}
       <Header />
 

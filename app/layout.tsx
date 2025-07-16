@@ -28,7 +28,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={geistSans.className} suppressHydrationWarning>
-      <body className="bg-background text-foreground flex min-h-screen flex-col">
+      <body className="bg-background text-foreground selection:bg-foreground selection:text-background flex min-h-screen flex-col items-center">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -36,7 +36,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {!hasEnvVars ? <EnvVarWarning /> : null}
-          <div className="flex  flex-1 flex-col  gap-20">
+          <div className="flex flex-1 flex-col gap-20">
             <div>{children}</div>
 
             <footer className="mx-auto flex w-full items-center justify-center gap-8 border-t py-4 text-center text-xs">
