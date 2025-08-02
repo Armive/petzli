@@ -26,10 +26,7 @@
     "*.scss": "scss",
     "*.less": "less"
   },
-  "workbench.colorCustomizations": {
-    "statusBar.background": "#ffffff6c",
-    "statusBar.foreground": "#000"
-  },
+  "workbench.colorCustomizations": {},
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   }

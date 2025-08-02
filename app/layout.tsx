@@ -36,23 +36,10 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {!hasEnvVars ? <EnvVarWarning /> : null}
-          <div className="flex flex-1 flex-col gap-20">
+          <div className="flex w-full flex-1 flex-col">
             <div>{children}</div>
 
-            <footer className="mx-auto flex w-full items-center justify-center gap-8 border-t py-4 text-center text-xs">
-              <p>
-                Powered by{" "}
-                <a
-                  href="https://vercel.com/home"
-                  target="_blank"
-                  className="font-bold hover:underline"
-                  rel="noreferrer"
-                >
-                  Vercel
-                </a>
-              </p>
-              <ThemeSwitcher />
-            </footer>
+            <ThemeSwitcher />
           </div>
         </ThemeProvider>
       </body>
