@@ -33,7 +33,7 @@ type UserType = "pet-owner" | "no-pet" | null;
 
 interface UserFormData {
   userType: UserType;
-  username: string;
+  user_name: string;
   email: string;
   password: string;
   petName?: string;
@@ -44,7 +44,7 @@ interface UserFormData {
 export default function SignUp() {
   const [userData, setUserData] = useState<UserFormData>({
     userType: null,
-    username: "",
+    user_name: "",
     email: "",
     password: "",
   });
@@ -52,7 +52,7 @@ export default function SignUp() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Username availability checking
-  const [username, setUsername] = useState("");
+  const [user_name, setUsername] = useState("");
   const [isAvailable, setIsAvailable] = useState<boolean | null>(null);
   const [isChecking, setIsChecking] = useState(false);
 
@@ -65,14 +65,14 @@ export default function SignUp() {
   }, [searchParams, step]);
 
   useEffect(() => {
-    const isValid = /^[a-zA-Z0-9_]{3,30}$/.test(username);
-    if (!isValid || username.length < 3) {
+    const isValid = /^[a-zA-Z0-9_]{3,30}$/.test(user_name);
+    if (!isValid || user_name.length < 3) {
       setIsAvailable(false);
       return;
     }
 
     setIsChecking(true);
-    // Simulate API call for username checking
+    // Simulate API call for user_name checking
     const timeoutId = setTimeout(() => {
       // Mock availability check - in real app, this would be an API call
       const unavailableUsernames = [
@@ -83,12 +83,12 @@ export default function SignUp() {
         "cat",
         "dog",
       ];
-      setIsAvailable(!unavailableUsernames.includes(username.toLowerCase()));
+      setIsAvailable(!unavailableUsernames.includes(user_name.toLowerCase()));
       setIsChecking(false);
     }, 500);
 
     return () => clearTimeout(timeoutId);
-  }, [username]);
+  }, [user_name]);
 
   const handleNext = () => {
     if (step < 4) setStep(step + 1);
@@ -121,7 +121,7 @@ export default function SignUp() {
     if (step === 1) {
       newData.userType = formData.get("userType") as UserType;
     } else if (step === 2) {
-      newData.username = formData.get("username") as string;
+      newData.user_name = formData.get("user_name") as string;
       newData.email = formData.get("email") as string;
       newData.password = formData.get("password") as string;
     } else if (step === 3 && userData.userType === "pet-owner") {
@@ -140,7 +140,7 @@ export default function SignUp() {
 
       const submitFormData = new FormData();
       submitFormData.append("userType", newData.userType!);
-      submitFormData.append("username", newData.username);
+      submitFormData.append("user_name", newData.user_name);
       submitFormData.append("email", newData.email);
       submitFormData.append("password", newData.password);
 
@@ -164,8 +164,8 @@ export default function SignUp() {
           userData.email.length <= 60 &&
           userData.password.length >= 8 &&
           userData.password.length <= 30 &&
-          userData.username.length >= 3 &&
-          userData.username.length <= 30 &&
+          userData.user_name.length >= 3 &&
+          userData.user_name.length <= 30 &&
           isAvailable === true
         );
       case 3:
@@ -327,7 +327,7 @@ export default function SignUp() {
 
               <div>
                 <label
-                  htmlFor="username"
+                  htmlFor="user_name"
                   className="mb-2 block text-sm dark:text-white"
                 >
                   Your Username
@@ -335,21 +335,21 @@ export default function SignUp() {
                 <div className="relative flex flex-col">
                   <Input
                     type="text"
-                    value={username}
+                    value={user_name}
                     onChange={(e) => {
                       const value = e.target.value.replace(/\s/g, "");
                       setUsername(value);
-                      setUserData({ ...userData, username: value });
+                      setUserData({ ...userData, user_name: value });
                     }}
-                    placeholder="Choose the furry little paw username"
+                    placeholder="Choose the furry little paw user_name"
                     className="text-foreground w-full rounded-sm border-black pr-10 dark:border-white"
                     required
-                    name="username"
+                    name="user_name"
                     autoComplete="off"
                     minLength={3}
                     maxLength={30}
                   />
-                  {username.length > 0 && (
+                  {user_name.length > 0 && (
                     <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
                       {isChecking ? (
                         <div className="h-5 w-5 animate-spin rounded-full border-t-2 border-blue-500" />
@@ -361,14 +361,14 @@ export default function SignUp() {
                     </div>
                   )}
                 </div>
-                {username.length > 0 && !isChecking && (
+                {user_name.length > 0 && !isChecking && (
                   <p
                     className={`text-sm ${isAvailable ? "text-green-600" : "text-red-600"}`}
                   >
                     {isAvailable
-                      ? "This username is available!"
-                      : username.length >= 3
-                        ? "This username is not available or invalid."
+                      ? "This user_name is available!"
+                      : user_name.length >= 3
+                        ? "This user_name is not available or invalid."
                         : "Username must be at least 3 characters."}
                   </p>
                 )}

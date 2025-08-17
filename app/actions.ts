@@ -9,7 +9,7 @@ import { z } from "zod";
 
 // Form validation schemas
 const petOwnerSchema = z.object({
-  username: z
+  user_name: z
     .string()
     .min(3, "Username must be at least 3 characters")
     .max(30, "Username cannot exceed 30 characters"),
@@ -33,7 +33,7 @@ const petOwnerSchema = z.object({
 });
 
 const nonPetOwnerSchema = z.object({
-  username: z
+  user_name: z
     .string()
     .min(3, "Username must be at least 3 characters")
     .max(30, "Username cannot exceed 30 characters"),
@@ -63,12 +63,12 @@ export const registerUserAction = async (formData: FormData) => {
   const userType = formData.get("userType")?.toString() as
     | "pet-owner"
     | "no-pet";
-  const username = formData.get("username")?.toString();
+  const user_name = formData.get("user_name")?.toString();
   const email = formData.get("email")?.toString();
   const password = formData.get("password")?.toString();
 
   // Basic validation
-  if (!email || !password || !username || !userType) {
+  if (!email || !password || !user_name || !userType) {
     return encodedRedirect(
       "error",
       "/sign-up",
@@ -78,7 +78,7 @@ export const registerUserAction = async (formData: FormData) => {
 
   // Prepare data object based on user type
   const userData: {
-    username: string;
+    user_name: string;
     email: string;
     password: string;
     userType: "no-pet" | "pet-owner";
@@ -86,7 +86,7 @@ export const registerUserAction = async (formData: FormData) => {
     petGender?: string;
     petAge?: number;
   } = {
-    username,
+    user_name,
     email,
     password,
     userType,
@@ -114,9 +114,9 @@ export const registerUserAction = async (formData: FormData) => {
   // Validate data with Zod
   try {
     registrationSchema.parse(userData);
-  } catch (validationError) {
+  } catch (validationError: unknown) {
     if (validationError instanceof z.ZodError) {
-      const errorMessage = validationError.errors
+      const errorMessage = validationError.issues
         .map((e) => e.message)
         .join(", ");
       return encodedRedirect("error", "/sign-up", errorMessage);
@@ -126,8 +126,8 @@ export const registerUserAction = async (formData: FormData) => {
   // Check if username already exists
   const { data: existingUser } = await supabase
     .from("profiles")
-    .select("username")
-    .eq("username", username)
+    .select("user_name")
+    .eq("user_name", user_name)
     .single();
 
   if (existingUser) {
@@ -141,7 +141,7 @@ export const registerUserAction = async (formData: FormData) => {
     options: {
       emailRedirectTo: `${origin}/auth/callback`,
       data: {
-        username,
+        user_name,
         user_type: userType,
         pet_name: userData.petName,
         pet_age: userData.petAge,

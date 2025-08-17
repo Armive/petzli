@@ -18,9 +18,8 @@ import { Item } from "./item";
 
 export default function VerticalNav() {
   const pathname = usePathname();
-  console.log(pathname);
   return (
-    <div className="flex h-screen flex-col items-center border-r border-gray-200 bg-white px-2 py-4">
+    <div className="border-border flex h-screen flex-col items-center border-r px-2 py-4">
       {/* Navigation Icons */}
       <div className="flex flex-col items-center gap-6">
         {/* Home Icon */}
