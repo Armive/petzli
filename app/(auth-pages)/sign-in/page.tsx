@@ -45,7 +45,7 @@ export default async function Login(props: { searchParams: Promise<Message> }) {
         />
       </div>
       <Link
-        href="/signup"
+        href="/sign-up"
         className="text-foreground block text-sm hover:underline"
       >
         Haven&apos;t created your account yet? Sign up
