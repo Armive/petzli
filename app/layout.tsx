@@ -38,8 +38,9 @@ export default function RootLayout({
           {!hasEnvVars ? <EnvVarWarning /> : null}
           <div className="flex w-full flex-1 flex-col">
             <div>{children}</div>
-
-            <ThemeSwitcher />
+            <div className="absolute right-4 bottom-0">
+              <ThemeSwitcher />
+            </div>
           </div>
         </ThemeProvider>
       </body>

@@ -163,16 +163,32 @@ export const registerUserAction = async (formData: FormData) => {
     "Thanks for signing up! Please check your email for a verification link.",
   );
 };
+const signInSchema = z.object({
+  email: z
+    .string()
+    .min(1, "Email is required")
+    .max(60, "Email cannot exceed 60 characters")
+    .regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Please enter a valid email address")
+    .transform((val) => val.toLowerCase().trim()),
+
+  password: z
+    .string()
+    .min(8, "Password must be at least 8 characters")
+    .max(30, "Password cannot exceed 30 characters"),
+});
 
 export const signInAction = async (formData: FormData) => {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
+
+  const result = signInSchema.safeParse({ email, password });
+  if (!result.success) {
+    return encodedRedirect("error", "/sign-in", "Password or email invalid");
+  }
+
   const supabase = await createClient();
 
-  const { error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
+  const { error } = await supabase.auth.signInWithPassword(result.data);
 
   if (error) {
     return encodedRedirect("error", "/sign-in", error.message);
@@ -271,4 +287,65 @@ export const githubLogin = async () => {
   if (data.url) {
     redirect(data.url);
   }
+};
+
+const createPostSchema = z.object({
+  title: z
+    .string()
+    .min(5, "Title must be at least 5 characters")
+    .max(100, "Title cannot exceed 100 characters"),
+  description: z
+    .string()
+    .max(500, "Description cannot exceed 500 characters")
+    .optional(),
+  location: z
+    .string()
+    .max(100, "Location cannot exceed 100 characters")
+    .optional(),
+  file: z
+    .instanceof(File)
+    .refine((f) => f.size > 0, "Please upload a file")
+    .refine((f) => f.size < 5 * 1024 * 1024, "File size must be under 5MB")
+    .refine((f) => f.type.startsWith("image/"), "File must be an image"),
+});
+
+export const createPostAction = async (
+  formData: FormData,
+): Promise<{ success: boolean; error?: unknown }> => {
+  const supabase = await createClient();
+  const title = formData.get("title")?.toString();
+  const description = formData.get("description")?.toString() || "";
+  const location = formData.get("location")?.toString() || "";
+  const file = formData.get("file") as File | null;
+
+  const result = createPostSchema.safeParse({
+    title,
+    description,
+    location,
+    file,
+  });
+  if (!result.success) {
+    return { success: false, error: result.error };
+  }
+
+  const ext = file?.name.split(".").pop();
+  const filePath = `images/${crypto.randomUUID()}.${ext}`;
+  const { data: storage_data, error: storage_error } = await supabase.storage
+    .from("posts")
+    .upload(filePath, file!);
+
+  if (storage_error) {
+    return { success: false, error: storage_error };
+  }
+  const authUser = await supabase.auth.getUser();
+
+  const { error } = await supabase.from("posts").insert({
+    title: result.data.title,
+    description: result.data.description,
+    location: result.data.location,
+    image: storage_data.id,
+    author_id: authUser.data.user?.id,
+  });
+  const success = !error;
+  return { success, error };
 };

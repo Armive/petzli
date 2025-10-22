@@ -60,20 +60,32 @@ export default function SignUp() {
 
   useEffect(() => {
     if (step === 3 && searchParams.has("success")) {
-      setStep(4);
+      // Defer the state update to the next tick to avoid synchronous setState inside an effect
+      const id = window.setTimeout(() => {
+        setStep(4);
+      }, 0);
+      return () => window.clearTimeout(id);
     }
   }, [searchParams, step]);
 
   useEffect(() => {
     const isValid = /^[a-zA-Z0-9_]{3,30}$/.test(user_name);
     if (!isValid || user_name.length < 3) {
-      setIsAvailable(false);
-      return;
+      // Defer state update to the next tick to avoid synchronous setState inside an effect
+      const id = window.setTimeout(() => {
+        setIsAvailable(false);
+        setIsChecking(false);
+      }, 0);
+      return () => window.clearTimeout(id);
     }
 
-    setIsChecking(true);
+    // Defer flipping isChecking to avoid calling setState synchronously within the effect
+    const startId = window.setTimeout(() => {
+      setIsChecking(true);
+    }, 0);
+
     // Simulate API call for user_name checking
-    const timeoutId = setTimeout(() => {
+    const timeoutId = window.setTimeout(() => {
       // Mock availability check - in real app, this would be an API call
       const unavailableUsernames = [
         "admin",
@@ -87,7 +99,10 @@ export default function SignUp() {
       setIsChecking(false);
     }, 500);
 
-    return () => clearTimeout(timeoutId);
+    return () => {
+      window.clearTimeout(startId);
+      window.clearTimeout(timeoutId);
+    };
   }, [user_name]);
 
   const handleNext = () => {

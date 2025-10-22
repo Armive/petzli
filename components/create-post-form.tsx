@@ -1,315 +1,239 @@
 "use client";
 
-import type * as React from "react";
-import { useState, useRef, useCallback } from "react";
-import { Button } from "@/components/ui/button";
+import type React from "react";
+
+import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 
-import { toast } from "sonner";
-import { ImagePlus, MapPin, Loader2, Heading, Upload } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { ArrowUp } from "lucide-react";
 import Image from "next/image";
+import { Button } from "./ui/button";
+import { createPostAction } from "@/app/actions";
+import clsx from "clsx";
+import Link from "next/link";
 
-type PostPreview = {
-  title: string;
-  location: string;
-  imageUrl: string;
-  imageName: string;
-};
-
-export default function CreatePostForm() {
-  const [title, setTitle] = useState("");
-  const [location, setLocation] = useState("");
-  const [file, setFile] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string>("");
-  const [submitting, setSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState<PostPreview | null>(null);
+export function CreatePostForm() {
   const [dragActive, setDragActive] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const [fileUrl, setFileUrl] = useState<string | null>(null);
+  const [file, setFile] = useState<File | null>(null);
+  const [success, setSuccess] = useState<boolean | null>(null);
 
-  const resetPreview = useCallback(() => {
-    if (previewUrl) {
-      URL.revokeObjectURL(previewUrl);
+  const handleDrag = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.type === "dragenter" || e.type === "dragover") {
+      setDragActive(true);
+    } else if (e.type === "dragleave") {
+      setDragActive(false);
     }
-    setPreviewUrl("");
-  }, [previewUrl]);
-
-  const handleFile = useCallback(
-    (f: File) => {
-      if (!f.type.startsWith("image/")) {
-        toast("Unsupported file", {
-          description: "Please upload an image file.",
-        });
-        return;
-      }
-      setFile(f);
-      resetPreview();
-      const url = URL.createObjectURL(f);
-      setPreviewUrl(url);
-    },
-    [resetPreview],
-  );
-
-  const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const f = e.target.files?.[0];
-    if (f) handleFile(f);
   };
 
-  const onDrop = (e: React.DragEvent<HTMLLabelElement>) => {
+  const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
-    const f = e.dataTransfer.files?.[0];
-    if (f) handleFile(f);
+    // Handle file drop logic here
+    const files = e.dataTransfer.files;
+    const lastFile = files[files.length - 1];
+    if (!lastFile.type.startsWith("image/")) return;
+    const url = URL.createObjectURL(lastFile);
+    setFileUrl(url);
+    setFile(lastFile);
   };
+  useEffect(() => {
+    console.log(success);
+  }, [success]);
 
-  const onDragOver = (e: React.DragEvent<HTMLLabelElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(true);
-  };
-
-  const onDragLeave = (e: React.DragEvent<HTMLLabelElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(false);
-  };
-
-  const useMyLocation = async () => {
-    if (!("geolocation" in navigator)) {
-      toast("Geolocation not available", {
-        description: "Your browser does not support geolocation.",
-      });
-      return;
-    }
-
-    try {
-      const pos = await new Promise<GeolocationPosition>((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(resolve, reject, {
-          enableHighAccuracy: true,
-          timeout: 10000,
-          maximumAge: 0,
-        });
-      });
-      const lat = pos.coords.latitude.toFixed(6);
-      const lng = pos.coords.longitude.toFixed(6);
-      setLocation(`${lat}, ${lng}`);
-      toast("Location added", {
-        description: `Using current coordinates: ${lat}, ${lng}`,
-      });
-    } catch {
-      toast("Unable to get location", {
-        description: "Please allow location access or enter it manually.",
-      });
-    }
-  };
-
-  const validate = (): string[] => {
-    const errors: string[] = [];
-    if (!title.trim()) errors.push("Title is required.");
-    if (!location.trim()) errors.push("Location is required.");
-    if (!file) errors.push("An image is required.");
-    return errors;
-  };
-
-  const onSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitted(null);
-    const errors = validate();
-    if (errors.length) {
-      toast("Please fix the following errors", {
-        description: errors.join(" "),
-      });
-      return;
-    }
-
-    setSubmitting(true);
-    // Simulate network latency
-    await new Promise((res) => setTimeout(res, 800));
-    setSubmitting(false);
-
-    setSubmitted({
-      title: title.trim(),
-      location: location.trim(),
-      imageUrl: previewUrl,
-      imageName: file ? file.name : "image",
-    });
-
-    toast("Post created", {
-      description: "This demo shows your submission below.",
-    });
-  };
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [place, setPlace] = useState("");
+  const [disabled, setDisabled] = useState(false);
 
   return (
-    <div className="space-y-8">
+    <>
       <form
-        onSubmit={onSubmit}
-        className="space-y-6"
-        aria-describedby="form-status"
+        className={clsx("grid grid-cols-1 gap-6 lg:grid-cols-[380px_1fr]", {
+          hidden: success,
+        })}
+        onSubmit={async (e) => {
+          e.preventDefault();
+          setDisabled(true);
+          const formData = new FormData(e.currentTarget);
+          if (file) {
+            formData.append("file", file);
+            const { success } = await createPostAction(formData);
+            if (success) {
+              setSuccess(true);
+            } else {
+              setSuccess(false);
+            }
+            setDisabled(false);
+          }
+        }}
       >
-        <div className="grid gap-6">
+        {/* Left side - File upload */}
+        <input
+          type="file"
+          className="hidden"
+          id="file"
+          onChange={(e) => {
+            const files = e.target.files;
+            if (!files || files.length === 0) return;
+
+            const lastFile = files[files.length - 1];
+
+            if (!lastFile.type.startsWith("image/")) return;
+            setFile(lastFile);
+            const url = URL.createObjectURL(lastFile);
+            setFileUrl(url);
+          }}
+        />
+        <label
+          htmlFor="file"
+          className={`relative cursor-pointer rounded-2xl border-2 p-8 text-center shadow-sm transition-all duration-200 hover:shadow-md ${
+            dragActive
+              ? "border-foreground bg-background scale-[1.03]"
+              : "border-foreground bg-background"
+          }`}
+          onDragEnter={handleDrag}
+          onDragLeave={handleDrag}
+          onDragOver={handleDrag}
+          onDrop={handleDrop}
+        >
+          <div className="flex min-h-[320px] flex-col items-center justify-center space-y-5">
+            {fileUrl ? (
+              <Image
+                src={fileUrl}
+                alt="image"
+                height={400}
+                width={400}
+                className="rounded-2xl"
+              />
+            ) : (
+              <>
+                <div className="bg-background border-foreground flex h-12 w-12 items-center justify-center rounded-full border-2 shadow-sm">
+                  <ArrowUp className="text-foreground h-6 w-6" />
+                </div>
+                <div className="space-y-1">
+                  <p className="text-foreground text-base font-semibold">
+                    Choose a file or drag and
+                  </p>
+                  <p className="text-foreground text-base font-semibold">
+                    drop it here
+                  </p>
+                </div>
+                <div className="text-foreground max-w-xs px-4 text-sm leading-relaxed font-medium">
+                  It is recommended to use{" "}
+                  <span className="text-foreground font-semibold">.jpg</span>{" "}
+                  high-quality files under{" "}
+                  <span className="text-foreground font-semibold">20 MB</span>{" "}
+                  or <span className="text-foreground font-semibold">.mp4</span>{" "}
+                  files under{" "}
+                  <span className="text-foreground font-semibold">200 MB</span>.
+                </div>
+              </>
+            )}
+          </div>
+        </label>
+
+        {/* Right side - Form fields */}
+        <div className="space-y-5 pt-2">
           {/* Title */}
-          <div className="grid gap-2">
-            <Label
-              htmlFor="title"
-              className="text-foreground flex items-center gap-2"
-            >
-              <Heading className="h-4 w-4" aria-hidden="true" />
+          <div className="space-y-2">
+            <Label htmlFor="title" className="text-sm font-semibold">
               Title
             </Label>
             <Input
-              id="title"
-              name="title"
+              minLength={5}
+              maxLength={100}
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="A crisp, descriptive title"
-              maxLength={120}
-              aria-required="true"
+              id="title"
+              name="title"
+              placeholder="A cute dog in a birthday hat"
+              className="hover:border-foreground border-border rounded-xl border-2 text-sm shadow-sm transition-all duration-200 focus:border-black focus:shadow-md"
             />
-            <p className="text-xs text-neutral-500">{`${title.length}/120`}</p>
+          </div>
+
+          {/* Description */}
+          <div className="space-y-2">
+            <Label
+              htmlFor="description"
+              className="text-foreground text-sm font-semibold"
+            >
+              Description (optional)
+            </Label>
+            <Textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              maxLength={500}
+              id="description"
+              placeholder="This dog likes"
+              name="description"
+              className="hover:border-foreground border-border bg-background min-h-[100px] resize-none rounded-xl border-2 px-4 py-3 text-sm shadow-sm transition-all duration-200 focus:border-black focus:shadow-md"
+            />
           </div>
 
           {/* Location */}
-          <div className="grid gap-2">
-            <Label htmlFor="location" className="flex items-center gap-2">
-              <MapPin className="h-4 w-4" aria-hidden="true" />
-              Location
+          <div className="space-y-2">
+            <Label htmlFor="place" className="text-sm font-semibold">
+              Location (optional)
             </Label>
-            <div className="flex flex-col gap-2 sm:flex-row">
-              <Input
-                id="location"
-                name="location"
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-                placeholder="City, Place, or coordinates"
-                aria-required="true"
-              />
-              <Button type="button" onClick={useMyLocation}>
-                Use my location
-              </Button>
-            </div>
-            <p className="text-xs text-neutral-500">
-              Tip: You can paste coordinates like {"'37.7749, -122.4194'"}.
-            </p>
-          </div>
-
-          {/* Image Upload */}
-          <div className="grid gap-2">
-            <Label htmlFor="image" className="flex items-center gap-2">
-              <ImagePlus className="h-4 w-4" aria-hidden="true" />
-              Image
-            </Label>
-
-            <input
-              ref={inputRef}
-              id="image"
-              name="image"
-              type="file"
-              accept="image/*"
-              onChange={onInputChange}
-              className="hidden"
-              aria-required="true"
+            <Input
+              value={place}
+              onChange={(e) => setPlace(e.target.value)}
+              max={100}
+              id="place"
+              name="place"
+              placeholder="Barcelona, Spain"
+              className="hover:border-foreground border-border rounded-xl border-2 px-4 py-3 text-sm shadow-sm transition-all duration-200 focus:border-black focus:shadow-md"
             />
-
-            <label
-              htmlFor="image"
-              onDrop={onDrop}
-              onDragOver={onDragOver}
-              onDragLeave={onDragLeave}
-              className={cn(
-                "flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed p-6 transition",
-                "bg-background hover:bg-foreground hover:text-background border-neutral-800",
-                dragActive && "bg-foreground border-neutral-300",
-              )}
-              aria-label="Upload image by clicking or dragging a file here"
-            >
-              <div className="text-foreground-300 flex items-center gap-2">
-                <Upload className="h-5 w-5" aria-hidden="true" />
-                <span className="font-medium">Click to upload</span>
-                <span className="text-foreground">{" or drag & drop"}</span>
-              </div>
-              <p className="text-foreground mt-1 text-xs">PNG, JPG, or GIF</p>
-              {file && (
-                <p className="text-foreground-400 mt-2 text-xs">
-                  Selected: <span className="font-medium">{file.name}</span>
-                </p>
-              )}
-            </label>
-
-            {/* Live Preview (Black and White) */}
-            {previewUrl ? (
-              <div className="mt-3 overflow-hidden rounded-md border border-neutral-800">
-                <Image
-                  src={previewUrl || "/placeholder.svg"}
-                  alt="Selected image preview in black and white"
-                  className="max-h-[320px] w-full object-cover grayscale"
-                  crossOrigin="anonymous"
-                />
-              </div>
-            ) : null}
           </div>
-        </div>
-
-        <div className="flex flex-col gap-2 sm:flex-row">
-          <Button type="submit" disabled={submitting} aria-live="polite">
-            {submitting ? (
-              <span className="inline-flex items-center gap-2">
-                <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
-                Posting...
-              </span>
-            ) : (
-              "Create post"
-            )}
+          <Button className="cursor-pointer" disabled={disabled}>
+            Create Post
           </Button>
         </div>
-        <span id="form-status" className="sr-only">
-          {submitting ? "Submitting your post" : "Form ready"}
-        </span>
       </form>
+      <div
+        className={clsx(
+          "from--900 flex min-h-screen flex-col items-center justify-center bg-gradient-to-br via-black to-gray-400 px-4 text-white transition-all duration-500",
+          { hidden: !success },
+        )}
+      >
+        <div className="border-foreground bg-background transform rounded-2xl border p-8 text-center shadow-2xl backdrop-blur-lg transition-transform duration-300 hover:scale-[1.01]">
+          <h1 className="mb-2 text-3xl font-bold tracking-tight">
+            🎉 Post created successfully!
+          </h1>
 
-      {/* Submission Preview */}
-      {submitted && (
-        <Card className="border-neutral-800 bg-neutral-900 text-neutral-50">
-          <CardHeader>
-            <CardTitle className="text-xl">Preview</CardTitle>
-            <CardDescription className="text-neutral-400">
-              This is a local preview of your post.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="overflow-hidden rounded-md border border-neutral-800">
-              <Image
-                src={submitted.imageUrl || "/placeholder.svg"}
-                alt={`Preview of ${submitted.imageName}`}
-                className="max-h-[420px] w-full object-cover grayscale"
-                crossOrigin="anonymous"
-              />
-            </div>
-            <div className="grid gap-2">
-              <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-                <p className="text-sm tracking-wider text-neutral-400 uppercase">
-                  Title
-                </p>
-                <p className="font-medium">{submitted.title}</p>
-              </div>
-              <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-                <p className="text-sm tracking-wider text-neutral-400 uppercase">
-                  Location
-                </p>
-                <p className="font-medium">{submitted.location}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      )}
-    </div>
+          <p className="text-foreground mb-6">
+            Your post has been created and is now live.
+          </p>
+
+          <div className="flex flex-wrap justify-center gap-3">
+            <button
+              onClick={() => {
+                setSuccess(null);
+                setFile(null);
+                setFileUrl(null);
+                setTitle("");
+                setDescription("");
+                setPlace("");
+              }}
+              className="bg-background hover:bg-foreground hover:text-background rounded-xl border border-white px-5 py-2 font-medium text-white shadow-md transition-transform hover:scale-105"
+            >
+              Create Another Post
+            </button>
+
+            <Link href="/" passHref>
+              <button className="hover:bg-background hover:border-foreground hover:text-foreground text-background bg-foreground rounded-xl px-5 py-2 font-medium shadow-md transition-transform hover:scale-105 hover:border">
+                Go to Home
+              </button>
+            </Link>
+          </div>
+        </div>
+      </div>
+    </>
   );
 }

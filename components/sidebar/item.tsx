@@ -14,7 +14,7 @@ export const Item = ({
 }) => {
   return (
     <Link href={url}>
-      <div className="text-foreground flex h-10 w-10 cursor-pointer items-center justify-center rounded-full hover:bg-gray-100">
+      <div className="text-foreground flex h-10 w-10 cursor-pointer items-center justify-center rounded-full transition-colors hover:bg-gray-100 dark:hover:bg-white/10">
         {isChecked ? (
           <IconChecked className="h-6 w-6" />
         ) : (

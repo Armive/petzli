@@ -18,7 +18,8 @@ const ThemeSwitcher = () => {
 
   // useEffect only runs on the client, so now we can safely show the UI
   useEffect(() => {
-    setMounted(true);
+    const id = requestAnimationFrame(() => setMounted(true));
+    return () => cancelAnimationFrame(id);
   }, []);
 
   if (!mounted) {
