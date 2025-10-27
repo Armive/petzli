@@ -343,7 +343,7 @@ export const createPostAction = async (
     title: result.data.title,
     description: result.data.description,
     location: result.data.location,
-    image: storage_data.id,
+    image: storage_data.path,
     author_id: authUser.data.user?.id,
   });
   const success = !error;
